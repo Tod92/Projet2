@@ -17,6 +17,7 @@ def scrap_book(url):
 
     product_page_url = url
     response = requests.get(url)
+    response.encoding = response.apparent_encoding #correction encodage pour les caractères s'afficheant mal
     if response.ok: #ne va pas plus loin si la connexion à la page web ne fonctionne pas
         soup = BeautifulSoup(response.text) #recuperation du html de la page web dans la variable soup
         tableau = soup.findAll("tr") #creation d'un liste "tableau" contenant tous les tableaux de la page
