@@ -16,7 +16,7 @@ def scrap_book(url):
     image_url"""
 
     product_page_url = url
-    response = requests.get(url)
+    response = requests.get(url,"lxml") #"lxml" pour evite un message d'avertissement de bs4 à l'execution du code
     response.encoding = response.apparent_encoding #correction encodage pour les caractères s'afficheant mal
     if response.ok: #ne va pas plus loin si la connexion à la page web ne fonctionne pas
         soup = BeautifulSoup(response.text) #recuperation du html de la page web dans la variable soup
@@ -29,8 +29,9 @@ def scrap_book(url):
                 price_excl_tax = element.find("td").text
             elif header.text == "Price (incl. tax)":
                 price_incl_tax = element.find("td").text
+    else:
         pass #definir quoi faire si pas de connexion à la page web
-    return [url,UPC,price_excl_tax,price_incl_tax]
+    return [product_page_url,UPC,price_excl_tax,price_incl_tax]
 
 
 resultat = scrap_book(url)
