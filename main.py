@@ -29,9 +29,18 @@ def scrap_book(url):
                 price_excl_tax = element.find("td").text
             elif header.text == "Price (incl. tax)":
                 price_incl_tax = element.find("td").text
+        title_temp = soup.find("title")
+        title_temp = title_temp.text #title temp contient le titre + " | Books to scrape - Sandbox"
+        print(title_temp)
+        title = ""
+        for char in title_temp: #boucle pour isoler le titre du livre
+            if char == "|":
+                break
+            else:
+                title += char
     else:
         pass #definir quoi faire si pas de connexion à la page web
-    return [product_page_url,UPC,price_excl_tax,price_incl_tax]
+    return [product_page_url,UPC,title,price_excl_tax,price_incl_tax]
 
 
 resultat = scrap_book(url)
