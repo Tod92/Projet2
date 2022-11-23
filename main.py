@@ -19,7 +19,7 @@ def scrap_book(url):
     response = requests.get(url,"lxml") #"lxml" pour evite un message d'avertissement de bs4 à l'execution du code
     response.encoding = response.apparent_encoding #correction encodage pour les caractères s'afficheant mal
     if response.ok: #ne va pas plus loin si la connexion à la page web ne fonctionne pas
-        soup = BeautifulSoup(response.text) #recuperation du html de la page web dans la variable soup
+        soup = BeautifulSoup(response.text,features="html.parser") #recuperation du html de la page web dans la variable soup
         tableau = soup.findAll("tr") #creation d'un liste "tableau" contenant tous les tableaux de la page
         for element in tableau:
             header = element.find("th")
@@ -29,18 +29,13 @@ def scrap_book(url):
                 price_excl_tax = element.find("td").text
             elif header.text == "Price (incl. tax)":
                 price_incl_tax = element.find("td").text
-        title_temp = soup.find("title")
-        title_temp = title_temp.text #title temp contient le titre + " | Books to scrape - Sandbox"
-        print(title_temp)
-        title = ""
-        for char in title_temp: #boucle pour isoler le titre du livre
-            if char == "|":
-                break
-            else:
-                title += char
+        title = soup.find("h1")
+        title = title.text
+        product_description = soup.findAll("p")
+        product_description = description[3].text #la description est contenue dans la 4e balise <p> de la page
     else:
         pass #definir quoi faire si pas de connexion à la page web
-    return [product_page_url,UPC,title,price_excl_tax,price_incl_tax]
+    return [product_page_url,UPC,title,price_excl_tax,price_incl_tax,product_description]
 
 
 resultat = scrap_book(url)
