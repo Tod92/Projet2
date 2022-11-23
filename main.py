@@ -37,11 +37,18 @@ def scrap_book(url):
                     number_available = "0"
         title = soup.find("h1")
         title = title.text
-        description = soup.findAll("p")
-        description = description[3].text #la description est contenue dans la 4e balise <p> de la page
+        product_description = soup.findAll("p")
+        product_description = product_description[3].text #la description est contenue dans la 4e balise <p> de la page
+        rating_list = ["One","Two","Three","Four","Five"]
+        encart_droite = soup.find("div", {"class" : "col-sm-6 product_main"})
+        for r in rating_list:
+            tofind = "star-rating " + r
+            if encart_droite.find("p", {"class" : tofind}):
+                categoryreview_rating = r
+                break
     else:
         pass #definir quoi faire si pas de connexion à la page web
-    return [product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax]
+    return [product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating]
 
 
 resultat = scrap_book(url)
