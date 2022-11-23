@@ -29,13 +29,19 @@ def scrap_book(url):
                 price_excl_tax = element.find("td").text
             elif header.text == "Price (incl. tax)":
                 price_incl_tax = element.find("td").text
+            elif header.text == "Availability":
+                available = element.find("td").text
+                if available[0:8] == "In stock":
+                    number_available = available[10:-11] #slice de la chaine de caractère pour isoler le nombre
+                else:
+                    number_available = "0"
         title = soup.find("h1")
         title = title.text
-        product_description = soup.findAll("p")
-        product_description = description[3].text #la description est contenue dans la 4e balise <p> de la page
+        description = soup.findAll("p")
+        description = description[3].text #la description est contenue dans la 4e balise <p> de la page
     else:
         pass #definir quoi faire si pas de connexion à la page web
-    return [product_page_url,UPC,title,price_excl_tax,price_incl_tax,product_description]
+    return [product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax]
 
 
 resultat = scrap_book(url)
