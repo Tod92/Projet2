@@ -1,7 +1,9 @@
-import requests
+import requests, csv
 from bs4 import BeautifulSoup
 
 url = "http://books.toscrape.com/catalogue/naked_197/index.html"
+Csv_header = ["product_page_url","UPC","title","price_incl_tax","price_excl_tax","number_available","product_description","categoryreview_rating","image_url"]
+
 
 def scrap_book(url):
     """return liste contenant :
@@ -46,10 +48,29 @@ def scrap_book(url):
             if encart_droite.find("p", {"class" : tofind}):
                 categoryreview_rating = r
                 break
+        encart_gauche = soup.find("div", {"class" : "col-sm-6"})
+        image_url = "http://books.toscrape.com/" + encart_gauche.img["src"]
     else:
         pass #definir quoi faire si pas de connexion à la page web
-    return [product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating]
+    return [product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating,image_url]
 
+def ajout_csv(liste):
+    """
+    en entrée :[product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating,image_url]
+    """
+    with open ("export.csv", "a",newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=',')
+            spamwriter.writerow(liste)
 
-resultat = scrap_book(url)
-print(resultat)
+def main():
+    #on genère le fichier csv avec l'en-tête
+    with open ("export.csv", "w",newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=',')
+            spamwriter.writerow(Csv_header)
+    resultat = scrap_book(url)
+    ajout_csv(resultat)
+    print(resultat)
+    print("fichier export.csv généré")
+
+if __name__ == '__main__':
+    main()
