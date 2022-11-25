@@ -1,7 +1,8 @@
 import requests, csv
 from bs4 import BeautifulSoup
 
-Base_url = "http://books.toscrape.com/catalogue/"
+Base_url = "http://books.toscrape.com/"
+Base_url_catalogue = "http://books.toscrape.com/catalogue/"
 Csv_header = ["product_page_url","UPC","title","price_incl_tax","price_excl_tax","number_available","product_description","categoryreview_rating","image_url"]
 
 def url_to_soup(url):
@@ -41,7 +42,7 @@ def scrap_category(url):
     articles = soup.findAll("article",{"class" : "product_pod"}) #recuperation de la liste des balises article correspondant à chaque livre de la page
     list_books_urls = []
     for article in articles:
-        book_url = Base_url + article.a["href"]
+        book_url = Base_url_catalogue + article.a["href"]
         book_url = book_url.replace("/..","") #nettoyage de l'url en retirant tous les "/.."
         list_books_urls.append(book_url)
     nextpage = soup.find("li",{"class" : "next"}) #recherche la présence du bouton "next" pour savoir si une page suivante avec d'autres livres est presente
@@ -119,4 +120,7 @@ def main():
         ajout_csv(scrap_book(book_url))
     print("traitement terminé")
 if __name__ == '__main__':
-    main()
+    #main()
+    book_url = "http://books.toscrape.com/catalogue/sharp-objects_997/index.html"
+    result = scrap_book(book_url)
+    print(result[-1:])
