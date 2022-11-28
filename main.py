@@ -127,7 +127,7 @@ def ajout_csv(liste,file_name):
     """
     en entrée :[product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating,image_url]
     """
-    with open (file_name, "a",newline='') as csvfile:
+    with open (file_name, "a",newline='',encoding='utf-8') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=',')
             spamwriter.writerow(liste)
 
