@@ -33,11 +33,34 @@ def url_remove_end(url):
 
 
 
+def scrap_index(url):
+    """
+    url en entree doit etre la page d'accueil de booktoscrap contenant la liste des categories de livres
+    return une liste des urls de toutes les categories de livres et une liste des noms des categories
+    """
+    soup = url_to_soup(url)
+    soup = soup.find("div",{"class" : "side_categories"}) #on se concentre uniquement sur la liste de categories a gauche de la page
+    categories = soup.findAll("li")
+    #print(categories)
+    list_categories_urls =[]
+    list_categories_names =[]
+    for category in categories:
+        category_url = Base_url + category.a["href"]
+        list_categories_urls.append(category_url)
+        category_name= category.a.text
+        category_name = category_name.strip()
+        list_categories_names.append(category_name)
+    list_categories_urls = list_categories_urls[1:] #suppression de la premiere entrée de la liste qui ne correspond pas à une categorie
+    list_categories_names = list_categories_names[1:]
+
+    return list_categories_urls,list_categories_names
+
 def scrap_category(url):
     """
     url en entrée doit etre le lien de la page d'une categorie
     return une liste des urls de tous les livres de la catégorie
     """
+
     soup = url_to_soup(url)
     articles = soup.findAll("article",{"class" : "product_pod"}) #recuperation de la liste des balises article correspondant à chaque livre de la page
     list_books_urls = []
@@ -100,27 +123,29 @@ def scrap_book(url):
     image_url = image_url.replace("/..","")
     return [product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating,image_url]
 
-def ajout_csv(liste):
+def ajout_csv(liste,file_name):
     """
     en entrée :[product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating,image_url]
     """
-    with open ("export.csv", "a",newline='') as csvfile:
+    with open (file_name, "a",newline='') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=',')
             spamwriter.writerow(liste)
 
 def main():
     #on genère le fichier csv avec l'en-tête
-    with open ("export.csv", "w",newline='') as csvfile:
-            spamwriter = csv.writer(csvfile, delimiter=',')
-            spamwriter.writerow(Csv_header)
-    category_url = "http://books.toscrape.com/catalogue/category/books/mystery_3/"
-    list_books_urls = scrap_category(category_url)
-    for book_url in list_books_urls:
-        print("scraping book : " + book_url)
-        ajout_csv(scrap_book(book_url))
+    list_categories_urls, list_categories_names = scrap_index(Base_url)
+    for n in range(len(list_categories_names)):
+        cat_url = list_categories_urls[n]
+        cat_name = list_categories_names[n]
+        file_name = cat_name + ".csv"
+        print("scraping category : " + cat_name)
+        with open (file_name, "w",newline='') as csvfile:
+                spamwriter = csv.writer(csvfile, delimiter=',')
+                spamwriter.writerow(Csv_header)
+        list_books_urls = scrap_category(cat_url)
+        for book_url in list_books_urls:
+            print("scraping book : " + book_url)
+            ajout_csv(scrap_book(book_url),file_name)
     print("traitement terminé")
 if __name__ == '__main__':
-    #main()
-    book_url = "http://books.toscrape.com/catalogue/sharp-objects_997/index.html"
-    result = scrap_book(book_url)
-    print(result[-1:])
+    main()
