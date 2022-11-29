@@ -110,7 +110,8 @@ def scrap_book(url):
     title = soup.find("h1")
     title = title.text
     product_description = soup.findAll("p")
-    product_description = product_description[3].text #la description est contenue dans la 4e balise <p> de la page
+    #la description est contenue dans la 4e balise <p> de la page
+    product_description = product_description[3].text
     rating_list = ["One","Two","Three","Four","Five"]
     encart_droite = soup.find("div", {"class" : "col-sm-6 product_main"})
     for r in rating_list:
@@ -121,7 +122,35 @@ def scrap_book(url):
     encart_gauche = soup.find("div", {"class" : "col-sm-6"})
     image_url = Base_url + encart_gauche.img["src"]
     image_url = image_url.replace("/..","")
-    return [product_page_url,UPC,title,price_excl_tax,number_available,price_incl_tax,product_description,categoryreview_rating,image_url]
+    dowload_image(title, image_url)
+    return [product_page_url, UPC,title, price_excl_tax, number_available,
+    price_incl_tax, product_description, categoryreview_rating, image_url]
+
+def clean_title(texte):
+    """
+    transforme les caractères speciaux d'un string en -
+    """
+    str1 = '\':.&*/\\\"?'
+    str2 = ""
+    for c in str1:
+        str2 += "-"
+    #str2 = '--------'
+    mytable = texte.maketrans(str1, str2)
+    texte_clean = texte.translate(mytable)
+
+    return texte_clean
+
+def dowload_image(title, image_url):
+    """
+    va telecharger l'image au format.jpg dans le dossier courant
+    le nom du fichier sera détérminé par title
+    """
+    response = requests.get(image_url)
+    if response.ok:
+        title = clean_title(title)
+        title += ".jpg"
+        with open(title, "wb") as file:
+            file.write(response.content)
 
 def ajout_csv(liste,file_name):
     """
