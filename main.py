@@ -160,7 +160,7 @@ def clean_title(texte):
     str1 = "\':.&*/\\\"?"
     str2 = ""
     # Boucle pour que str soit de la même longueur que str1 afin d'en faire une
-
+    # table pour str.translate()
     for c in str1:
         str2 += "-"
     mytable = texte.maketrans(str1, str2)
@@ -208,7 +208,7 @@ def main():
         file_name = cat_name + ".csv"
         # Creation du fichier csv au nom de la categorie à l'aide de la
         # fonction ajout_csv()
-        ajout_csv(Csv_header, cat_name, "w")
+        ajout_csv(Csv_header, file_name, "w")
         # Appel de la fonction scrap_category pour récuperer la liste des urls
         # de chaque livre de cette categorie
         list_books_urls = scrap_category(cat_url)
@@ -218,7 +218,7 @@ def main():
         # catégorie, au format voulu
         for book_url in list_books_urls:
             print("Scraping book : " + book_url)
-            ajout_csv(scrap_book(book_url), file_name)
+            ajout_csv(scrap_book(book_url), file_name, "a")
     print("Traitement terminé")
 
 
