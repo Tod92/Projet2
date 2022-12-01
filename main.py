@@ -147,8 +147,8 @@ def scrap_book(url):
     image_url = Base_url + encart_gauche.img["src"]
     image_url = image_url.replace("/..", "")
     dowload_image(title, image_url)
-    return [product_page_url, UPC, title, price_excl_tax, number_available,
-            price_incl_tax, product_description, categoryreview_rating,
+    return [product_page_url, UPC, title, price_incl_tax, price_excl_tax,
+            number_available, product_description, categoryreview_rating,
             image_url]
 
 
@@ -182,28 +182,40 @@ def dowload_image(title, image_url):
             file.write(response.content)
 
 
-def ajout_csv(liste, file_name):
+def ajout_csv(liste, file_name, mode):
     """
     En entrée : une liste d'elements qui seront ecrits dans une ligne du
-    fichier csv, séparés par une virgule et le nom du fichier csv dans lequel
-    ajouter la ligne
+    fichier csv, séparés par une virgule et le nom du fichier csv
+    ("fichier.csv") dans lequel ajouter la ligne.
+    mode : "w" pour la création du fichier, "a" pour ajout de ligne sur
+    un csv existant
     """
-    with open(file_name, "a", newline='', encoding='utf-8') as csvfile:
+    with open(file_name, mode, newline='', encoding='utf-8') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',')
         spamwriter.writerow(liste)
 
 
 def main():
+    # Appel de la fonction scrap_index() qui va scrap la page d'accueil et en
+    # extraire deux listes : la liste des url de chasue categorie et la liste
+    # des noms des categories
     list_categories_urls, list_categories_names = scrap_index(Base_url)
+    # Boucle qui va se repeter autant de fois que le nombre de categories
     for n in range(len(list_categories_names)):
         cat_url = list_categories_urls[n]
         cat_name = list_categories_names[n]
-        file_name = cat_name + ".csv"
         print("Scraping category : " + cat_name)
-        with open(file_name, "w", newline='') as csvfile:
-            spamwriter = csv.writer(csvfile, delimiter=',')
-            spamwriter.writerow(Csv_header)
+        file_name = cat_name + ".csv"
+        # Creation du fichier csv au nom de la categorie à l'aide de la
+        # fonction ajout_csv()
+        ajout_csv(Csv_header, cat_name, "w")
+        # Appel de la fonction scrap_category pour récuperer la liste des urls
+        # de chaque livre de cette categorie
         list_books_urls = scrap_category(cat_url)
+        # Boucle qui, pour chaque livre, va utiliser la fonction scrap_book()
+        # pour recuperer les informations voulues sur la page, puis utiliser la
+        # fonction ajout_csv pour ajouter ces informations dans le csv de la
+        # catégorie, au format voulu
         for book_url in list_books_urls:
             print("Scraping book : " + book_url)
             ajout_csv(scrap_book(book_url), file_name)
