@@ -160,10 +160,10 @@ def clean_title(texte):
     if len(texte) > 30:
         texte = texte[0:30]
     # str1 liste les caractères spéciaux à remplacer
-    str1 = "\':.&*/\\\"?"
+    str1 = "’\':.&*/\\\"?"
     str2 = ""
-    # Boucle pour que str soit de la même longueur que str1 afin d'en faire une
-    # table pour str.translate()
+    # Boucle pour que str2 soit de la même longueur que str1 afin d'en faire
+    # une table pour la fonction str.translate()
     for c in str1:
         str2 += "-"
     mytable = texte.maketrans(str1, str2)
@@ -199,9 +199,9 @@ def ajout_csv(liste, file_name, mode):
 
 
 def main():
-    # Appel de la fonction scrap_index() qui va scrap la page d'accueil et en
-    # extraire deux listes : la liste des url de chasue categorie et la liste
-    # des noms des categories
+    # Appel de la fonction scrap_index() qui va parcourir la page d'accueil et
+    # en extraire deux listes : la liste des url de chaque categorie et la
+    # liste des noms des categories
     list_categories_urls, list_categories_names = scrap_index(Base_url)
     # Boucle qui va se repeter autant de fois que le nombre de categories
     for n in range(len(list_categories_names)):

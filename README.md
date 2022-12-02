@@ -72,14 +72,15 @@ A noter que pour des raisons techniques d'enregistrement des fichiers, le nom de
 
 * les caractères spéciaux suivants ont été remplacés par le caractère "-" :
 
-  '
-  :
-  .
-  &
-  *
-  /
-  \\
-  ?
+  * ’
+  * '
+  * :
+  * .
+  * &
+  * *
+  * /
+  * \\
+  * ?
 
 * la longueur du titre a été tronquée à 30 caractères
 
