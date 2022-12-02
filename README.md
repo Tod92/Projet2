@@ -1,7 +1,9 @@
 # Projet 2 - Utilisez les bases de Python pour l'analyse de marché
 
 
-Ce script Python a pout but de se connecter au site [books.toscrape.com](books.toscrape.com) et d'en éxtraire les données souhaitées via le process ETL *(Extract Transform Load)*
+Ce script Python a pout but de "scraper" le site de librairie en ligne factice [books.toscrape.com](books.toscrape.com) afin d'en extraire les données tarifaires *(voir Format des données)* via un processus ETL *(Extract Transform Load)*\
+Ce script "Scraper" n'est pas prévu pour une surveillance en temps réel des données du site visé et doit donc etre executé manuellement afin d'extraire les données au temps T.
+
 
 
 ## Installation
