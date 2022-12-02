@@ -18,11 +18,11 @@ https://github.com/Tod92/Projet2
 
 * Créer l'environnement virtuel :
 
- `python -m venv env`
+  `python -m venv env`
 
 * Activer l'environnement virtuel :
 
- `..\Projet2-main\env\Scripts\activate.bat`
+  `..\Projet2-main\env\Scripts\activate.bat`
 
 * Installer les packages Python néçessaire à l'execution du script :
 
@@ -84,7 +84,15 @@ A noter que pour des raisons techniques d'enregistrement des fichiers, le nom de
 * la longueur du titre a été tronquée à 30 caractères
 
 
-## History
-TODO: Write history
+## Historique
+
+* 02/12/2022 : Finalisation projet et documentation
+* 31/11/2022 : Mise en page du code pour correspondre au PEP-8
+* 29/11/2022 : Phase 3 : telechargement des images
+* 28/11/2022 : Phase 3 : scraping complet
+* 25/11/2022 : Phase 2 : scraping d'une categorie
+* 23/11/2022 : Phase 1 : scraping d'un ouvrage
+* 17/11/2022 : Démarrage du projet
+
 ## Credits
 Projet réalisé par Thomas Deruère
