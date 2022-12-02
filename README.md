@@ -68,7 +68,7 @@ A noter que pour des raisons techniques d'enregistrement des fichiers, le nom de
   * :
   * .
   * &
-  * *
+  * \*
   * /
   * \\
   * ?
