@@ -155,7 +155,10 @@ def scrap_book(url):
 def clean_title(texte):
     """
     transforme les caractères speciaux d'un string en -
+    tronque la longueur du texte à 30 caractères
     """
+    if len(texte) > 30:
+        texte = texte[0:30]
     # str1 liste les caractères spéciaux à remplacer
     str1 = "\':.&*/\\\"?"
     str2 = ""
